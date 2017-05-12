@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const searchData = require('./models/search');
+const request = require('request');
 const app = express();
 require('dotenv').config();
 
@@ -12,7 +13,7 @@ const API_CX = process.env.GOOGLE_CX;
 const SEARCH_URL = 'https://www.googleapis.com/customsearch/v1';
 const SEARCH_TYPE = 'image';
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/imageSearch');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/imageSearch' );
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
@@ -46,7 +47,7 @@ app.get('/search/:search*', (req, res) => {
   let url = searchString(searchQuery, offset);
 
   //Use api and display results
-  imageSearch(url, result => {
+  imageSearch(url, function(result){
    result ? res.send(result) : res.send('Error searching for query');
   });
 });
@@ -79,9 +80,9 @@ function getRecentQueries(callback){
     }
     else {
       if (result.length >= 10) {
-        let queries = result.slice(result.length - 10);
+        result = result.slice(result.length - 10);
       }
-      callback(queries);
+      callback(result);
     }
   });
 }
