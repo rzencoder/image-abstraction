@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const searchSchema = new Schema({
-  longUrl: String,
-  smallUrl: String
+  query: String,
+  time: String
 }, {timestamps: true});
 
 const ModelClass = mongoose.model('search', searchSchema);
